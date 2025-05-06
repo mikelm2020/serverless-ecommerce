@@ -5,5 +5,5 @@ def lambda_handler(event, context):
         "headers": {
             "Content-Type": "application/json",
         },
-        "body": "Hello from Lambda!",
+        "body": f"Hello from Lambda! you've hit {event["path"]}",
     }

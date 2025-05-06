@@ -28,9 +28,12 @@ class ServerlessEcommerceStack(Stack):
             self,
             "productLambdaFunction",
             runtime=lambda_.Runtime.PYTHON_3_12,
-            handler="product.lambda-handler",
+            handler="product.product.lambda_handler",
             code=lambda_.Code.from_asset(
-                os.path.join(os.path.dirname(__file__), "../service")
+                os.path.join(
+                    os.path.dirname(__file__),
+                    "../../service",
+                ),
             ),
             environment={
                 "PRIMARY_KEY": "id",
@@ -39,18 +42,6 @@ class ServerlessEcommerceStack(Stack):
         )
 
         product_table.grant_read_write_data(product_function)
-
-        # Product microservices api gateway
-        # root name = product
-
-        # product
-        # GET /product
-        # POST /product
-
-        # Single product with id parameter
-        # GET /product/{id}
-        # PUT /product/{id}
-        # DELETE /product/{id}
 
         product_rest_api = apigateway.LambdaRestApi(
             self,
