@@ -21,13 +21,11 @@ def lambda_handler(event, context):
 
         case "POST":
             body = create_product(event["body"])
-            pass
         case "PUT":
             # TODO : update product
             pass
         case "DELETE":
-            # TODO : delete product
-            pass
+            body = delete_product(event["pathParameters"]["id"])
 
     return {
         "statusCode": 200,
@@ -131,6 +129,40 @@ def create_product(product):
             return {
                 "statusCode": 500,
                 "body": json.dumps({"error": f"Error al crear el producto: {str(e)}"}),
+            }
+
+    except Exception as e:
+        print(e)
+        return None
+
+
+def delete_product(product_id):
+    print("delete_product")
+    try:
+        dynamodb_client = DynamoDBClient().get_client()
+
+        if not product_id:
+            return {
+                "statusCode": 400,
+                "body": json.dumps(
+                    {"error": "Se requiere el ID del producto en la ruta"}
+                ),
+            }
+
+        try:
+            response = dynamodb_client.delete_item(Key={"product_id": product_id})
+            print(f"response: {response}")
+
+            return {
+                "statusCode": 200,
+                "body": json.dumps({"message": "Producto eliminado exitosamente"}),
+            }
+        except ClientError as e:
+            return {
+                "statusCode": 500,
+                "body": json.dumps(
+                    {"error": f"Error al eliminar el producto: {str(e)}"}
+                ),
             }
 
     except Exception as e:
