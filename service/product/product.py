@@ -39,8 +39,12 @@ def lambda_handler(event, context):
             "headers": {
                 "Content-Type": "application/json",
             },
-            "message": f"Operación finalizada exitosamente: {event['httpMethod']}",
-            "body": body,
+            "body": json.dumps(
+                {
+                    "message": f"Operación finalizada exitosamente: {event['httpMethod']}",
+                    "body": body,
+                }
+            ),
         }
     except Exception as e:
         print(e)
@@ -228,8 +232,8 @@ def get_product_by_category(event):
             response = dynamodb_client.query(
                 KeyConditionExpression="id = :product_id",
                 ExpressionAttributeValues={
-                    ":product_id": product_id,
-                    ":category": category,
+                    ":product_id": {"S": product_id},
+                    ":category": {"S": category},
                 },
                 FilterExpression="category = :category",
             )
