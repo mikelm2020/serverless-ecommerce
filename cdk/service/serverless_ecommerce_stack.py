@@ -28,11 +28,11 @@ class ServerlessEcommerceStack(Stack):
             self,
             "productLambdaFunction",
             runtime=lambda_.Runtime.PYTHON_3_12,
-            handler="product.product.lambda_handler",
+            handler="product.lambda_handler",
             code=lambda_.Code.from_asset(
                 os.path.join(
                     os.path.dirname(__file__),
-                    "../../service",
+                    "../../service/product",
                 ),
             ),
             environment={

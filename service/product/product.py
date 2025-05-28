@@ -3,8 +3,7 @@ import os
 import uuid
 
 from botocore.exceptions import ClientError
-
-from service.product.db_client import DynamoDBClient
+from db_client import DynamoDBClient
 
 
 def lambda_handler(event, context):
